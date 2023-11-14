@@ -1,0 +1,27 @@
+{
+    "name": "eduardo/lite-php",
+    "description": "Framework Simple Based Laravel",
+    "license": "MIT",
+    "scripts": {
+        "test":"phpunit --color=always --testdox test/"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lite\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lite\\Test\\": "test/"
+        }
+    },
+    "authors": [
+        {
+            "name": "eduardo",
+            "email": "eduardo.rodriguez.info@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^10.4"
+    }
+}

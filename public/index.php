@@ -10,14 +10,17 @@ $router->get("/hello", function () {
     return "get:hello";
 });
 
+$router->get("/test/{id}/preuba/{title}", function () {
+    return "get:params";
+});
+
 $router->post("/hello", function () {
     return "post:hello";
 });
 
 try {
     $action = $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
-    var_dump($action());
-    die();
+    echo $action()."\n";
 } catch (HttpNotFoundException $e) {
-    echo $e->getMessage();
+    echo "Not Found\n";
 }

@@ -2,7 +2,9 @@
 require_once "../vendor/autoload.php";
 
 use Lite\HttpNotFoundException;
+use Lite\Request;
 use Lite\Router;
+use Lite\ServerNative;
 
 $router = new Router();
 
@@ -19,8 +21,8 @@ $router->post("/hello", function () {
 });
 
 try {
-    $action = $router->resolve($_SERVER["REQUEST_URI"], $_SERVER["REQUEST_METHOD"]);
-    echo $action()."\n";
+    $action = $router->resolve(new Request(new ServerNative()));
+    echo $action() . "\n";
 } catch (HttpNotFoundException $e) {
     echo "Not Found\n";
 }

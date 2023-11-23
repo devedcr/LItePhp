@@ -17,7 +17,7 @@ class Route
         $this->uri = $uri;
         $this->action = $action;
         $this->regex_param_name = '/\{([a-zA-Z]+)\}/';
-        $this->regex_param_value = "#^" . preg_replace($this->regex_param_name, '(\S+)', $this->uri) . "$#";
+        $this->regex_param_value = "#^" . preg_replace($this->regex_param_name, '(\S+)', $this->uri) . "/?$#";
         preg_match_all($this->regex_param_name, $this->uri, $param_name);
         $this->parameter = $param_name[1];
     }

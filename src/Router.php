@@ -41,10 +41,10 @@ class Router
         $this->register_method(HttpMethod::DELETE, $uri, $action);
     }
 
-    public function resolve(string $uri, string $method)
+    public function resolve(Request $request)
     {
-        foreach ($this->routes[$method] as $route) {
-            if ($route->match($uri)) 
+        foreach ($this->routes[$request->getMethod()->value] as $route) {
+            if ($route->match($request->getUri()))
                 return $route->action();
         }
         throw new HttpNotFoundException();

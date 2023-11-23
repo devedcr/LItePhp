@@ -3,19 +3,28 @@
 namespace Lite\Test;
 
 use Lite\HttpMethod;
+use Lite\IServer;
 use Lite\Request;
 use Lite\Router;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
+    private function create_mock_server(string $uri, HttpMethod $method)
+    {
+        $mockServer = $this->getMockBuilder(IServer::class)->getMock();
+        $mockServer->method("requestUri")->willReturn($uri);
+        $mockServer->method("requestMethod")->willReturn($method);
+        return new Request($mockServer);
+    }
+
     public function test_resolve_route_action()
     {
         $uri = "/test";
         $router = new Router();
         $action = fn () => "test";
         $router->get($uri, $action);
-        $this->assertEquals($action, $router->resolve(new Request(new ServerTest($uri, HttpMethod::GET))));
+        $this->assertEquals($action, $router->resolve($this->create_mock_server($uri, HttpMethod::GET)));
     }
 
     public function test_resolve_multiple_route_action()
@@ -31,7 +40,7 @@ class RouterTest extends TestCase
             $router->get($uri, $method);
         }
         foreach ($routes as $uri => $method) {
-            $this->assertEquals($method, $router->resolve(new Request(new ServerTest($uri, HttpMethod::GET))));
+            $this->assertEquals($method, $router->resolve($this->create_mock_server($uri, HttpMethod::GET)));
         }
     }
     public function test_resolve_multiple_route_with_methods_action()
@@ -51,7 +60,7 @@ class RouterTest extends TestCase
             $router->{strtolower($method->value)}($uri, $action);
         }
         foreach ($routes as [$method, $uri, $action]) {
-            $this->assertEquals($action, $router->resolve(new Request(new ServerTest($uri, $method))));
+            $this->assertEquals($action, $router->resolve($this->create_mock_server($uri, $method)));
         }
     }
 }

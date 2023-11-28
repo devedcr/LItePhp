@@ -1,5 +1,5 @@
 <?php
-namespace Lite;
+namespace Lite\Http;
 
 enum HttpMethod: string
 {

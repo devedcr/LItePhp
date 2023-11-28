@@ -1,7 +1,8 @@
 <?php
 
-namespace Lite;
+namespace Lite\Server;
 
+use Lite\Http\HttpMethod;
 
 class ServerNative implements IServer
 {

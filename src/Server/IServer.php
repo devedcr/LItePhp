@@ -1,7 +1,8 @@
 <?php
 
-namespace Lite;
-use Lite\HttpMethod;
+namespace Lite\Server;
+
+use Lite\Http\HttpMethod;
 
 interface IServer
 {

@@ -1,5 +1,5 @@
 <?php 
-namespace Lite;
+namespace Lite\Http;
 
 use Exception;
 

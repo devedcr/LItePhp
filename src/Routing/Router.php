@@ -1,9 +1,11 @@
 <?php
 
-namespace Lite;
+namespace Lite\Routing;
 
 use Closure;
-use Lite\HttpMethod;
+use Lite\Http\HttpMethod;
+use Lite\Http\HttpNotFoundException;
+use Lite\Http\Request;
 
 class Router
 {

@@ -1,10 +1,13 @@
 <?php
+
+use Lite\Http\HttpNotFoundException;
+use Lite\Http\Request;
+use Lite\Routing\Router;
+use Lite\Server\ServerNative;
+
 require_once "../vendor/autoload.php";
 
-use Lite\HttpNotFoundException;
-use Lite\Request;
-use Lite\Router;
-use Lite\ServerNative;
+
 
 $router = new Router();
 

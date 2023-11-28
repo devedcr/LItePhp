@@ -2,15 +2,15 @@
 
 namespace Lite\Test;
 
-use Lite\HttpMethod;
-use Lite\IServer;
-use Lite\Request;
-use Lite\Router;
+use Lite\Http\HttpMethod;
+use Lite\Http\Request;
+use Lite\Routing\Router;
+use Lite\Server\IServer;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase
 {
-    private function create_mock_server(string $uri, HttpMethod $method)
+    private function create_mock_server(string $uri, HttpMethod $method): Request
     {
         $mockServer = $this->getMockBuilder(IServer::class)->getMock();
         $mockServer->method("requestUri")->willReturn($uri);

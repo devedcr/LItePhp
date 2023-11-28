@@ -2,7 +2,7 @@
 
 namespace Lite\Test;
 
-use Lite\Route;
+use Lite\Routing\Route;
 use PHPUnit\Framework\TestCase;
 
 class RouteTest extends TestCase

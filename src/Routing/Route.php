@@ -1,6 +1,6 @@
 <?php
 
-namespace Lite;
+namespace Lite\Routing;
 
 use Closure;
 

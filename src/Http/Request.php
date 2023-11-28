@@ -1,6 +1,8 @@
 <?php
 
-namespace Lite;
+namespace Lite\Http;
+
+use Lite\Server\IServer;
 
 class Request
 {

@@ -3,6 +3,7 @@
 namespace Lite\Server;
 
 use Lite\Http\HttpMethod;
+use Lite\Http\Response;
 
 class ServerNative implements IServer
 {
@@ -24,5 +25,21 @@ class ServerNative implements IServer
     public function requestParam(): array
     {
         return $_GET;
+    }
+    public function sendResponse(Response $response): void
+    {
+        //clean header default of way forced
+        header("content-type: test");
+        header_remove("content-type");
+
+        http_response_code($response->status());
+        if ($response->content() != null) {
+            header("content-length: " . (strlen($response->content())));
+            header("content-type: text/html; charset=UTF-8");
+        }
+        foreach ($response->headers() as $content => $value) {
+            header("{$content}: {$value}");
+        }
+        echo $response->content();
     }
 }

@@ -11,29 +11,26 @@ require_once "../vendor/autoload.php";
 $router = new Router();
 
 $router->get("/hello", function () {
-    $response = new Response();
-    $response->setStatus(201);
-    $response->setHeader("Content-Type", "application/JSON");
-    $response->setContent(json_encode([
-        "code" => "test"
-    ]));
-    return $response;
+    return Response::json(["code" => "test"])->setStatus(201);
 });
 
 $router->get("/test/{id}/preuba/{title}", function () {
-    return "get:params";
+    return Response::text("test param");
 });
 
 $router->post("/hello", function () {
-    return "post:hello";
+    return Response::text("hello post");
 });
 
+$router->get("/redirect", function () {
+    return Response::redirect("/hello");
+});
+
+$server = new ServerNative();
 try {
-    $server = new ServerNative();
     $action = $router->resolve(new Request($server));
     $response = $action();
     $server->sendResponse($response);
-    //echo $action() . "\n";
 } catch (HttpNotFoundException $e) {
-    echo "Not Found\n";
+    $server->sendResponse(Response::text("Not Found")->setStatus(404));
 }

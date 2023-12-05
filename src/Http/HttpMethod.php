@@ -1,6 +1,9 @@
 <?php
 namespace Lite\Http;
 
+/**
+ * ENUM case HTTP METHODS
+ */
 enum HttpMethod: string
 {
     case GET = "GET";

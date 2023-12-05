@@ -5,27 +5,46 @@ namespace Lite\Server;
 use Lite\Http\HttpMethod;
 use Lite\Http\Response;
 
+/**
+ * @implements IServer
+ */
 class ServerNative implements IServer
 {
+    /**
+     * @inheritDoc
+     */
     public function requestUri(): string
     {
         return  parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function requestMethod(): HttpMethod
     {
         return HttpMethod::from($_SERVER["REQUEST_METHOD"]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function requestPost(): array
     {
         return  $_POST;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function requestParam(): array
     {
         return $_GET;
     }
+
+    /**
+     * @inheritDoc
+     */
     public function sendResponse(Response $response): void
     {
         //clean header default of way forced

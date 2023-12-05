@@ -4,12 +4,39 @@ namespace Lite\Routing;
 
 use Closure;
 
+/**
+ * Route Class Join that join uri and action
+ */
 class Route
 {
+    /**
+     * Regex use for Extract name uri
+     * @var string
+     */
     public string $regex_param_name;
+
+    /**
+     * Regex use for Extract value uri
+     * @var string
+     */
     public string $regex_param_value;
+
+    /**
+     * Uri defined as Route
+     * @var string
+     */
     public string $uri;
+
+    /**
+     * Action to Execute
+     * @var Closure
+     */
     public Closure $action;
+
+    /**
+     * Have the parameters of routes
+     * @var array
+     */
     public array $parameter;
 
     public function __construct(string $uri, Closure $action)
@@ -21,25 +48,42 @@ class Route
         preg_match_all($this->regex_param_name, $this->uri, $param_name);
         $this->parameter = $param_name[1];
     }
-
+    /**
+     *  Getter Route Action 
+     * @return void
+     */
     public function action()
     {
         return $this->action;
     }
 
-    public function match(string $uri_value)
+    /**
+     * Compare uri request with the uri defined
+     * @param string $uri_value
+     * @return boolean
+     */
+    public function match(string $uri_value):bool
     {
         return preg_match($this->regex_param_value, $uri_value);
     }
 
+    /**
+     * Generate array with the parameters
+     * @param string $uri_value
+     * @return void
+     */
     public function parseParameters(string $uri_value)
     {
         preg_match($this->regex_param_value, $uri_value, $values);
         unset($values[0]);
         return array_combine($this->parameter, $values);
     }
-
-    public function hasParameters()
+    
+    /**
+     * Verfify if have parameters of routes
+     * @return boolean
+     */
+    public function hasParameters():bool
     {
         return  count($this->parameter) > 0;
     }

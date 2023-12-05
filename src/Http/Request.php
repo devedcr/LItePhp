@@ -4,11 +4,33 @@ namespace Lite\Http;
 
 use Lite\Server\IServer;
 
+/**
+ * Request Class Server
+ */
 class Request
 {
+    /**
+     * uri of request
+     * @var string 
+     */
     private string $uri;
+
+    /**
+     * POST Data Request
+     * @var array
+     */
     private array $data;
+    
+    /**
+     * Query Params Get 
+     * @var array
+     */
     private array $query;
+    
+    /**
+     * Methods of Request
+     * @var HttpMethod
+     */
     private HttpMethod $method;
 
 
@@ -20,12 +42,20 @@ class Request
         $this->method = $server->requestMethod();
     }
 
-    public function getUri()
+    /**
+     * Getter URI Request
+     * @return string
+     */
+    public function getUri():string
     {
         return $this->uri;
     }
 
-    public function getMethod()
+    /**
+     * Getter Methods Request
+     * @return HttpMethod
+     */
+    public function getMethod():HttpMethod
     {
         return $this->method;
     }

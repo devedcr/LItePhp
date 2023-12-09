@@ -3,6 +3,8 @@
 namespace Lite\Routing;
 
 use Closure;
+use Lite\App;
+use Lite\Container\Container;
 
 /**
  * Route Class Join that join uri and action
@@ -62,7 +64,7 @@ class Route
      * @param string $uri_value
      * @return boolean
      */
-    public function match(string $uri_value):bool
+    public function match(string $uri_value): bool
     {
         return preg_match($this->regex_param_value, $uri_value);
     }
@@ -78,13 +80,19 @@ class Route
         unset($values[0]);
         return array_combine($this->parameter, $values);
     }
-    
+
     /**
      * Verfify if have parameters of routes
      * @return boolean
      */
-    public function hasParameters():bool
+    public function hasParameters(): bool
     {
         return  count($this->parameter) > 0;
+    }
+
+    public static function get(string $uri, Closure $action)
+    {
+        $app = Container::singleton(App::class);
+        return $app->router()->get($uri, $action);
     }
 }

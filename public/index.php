@@ -1,36 +1,28 @@
 <?php
 
-use Lite\Http\HttpNotFoundException;
-use Lite\Http\Request;
-use Lite\Http\Response;
-use Lite\Routing\Router;
-use Lite\Server\ServerNative;
-
 require_once "../vendor/autoload.php";
 
-$router = new Router();
+use Lite\App;
+use Lite\Container\Container;
+use Lite\Http\Response;
+use Lite\Routing\Route;
 
-$router->get("/hello", function () {
+$app = Container::singleton(App::class);
+
+Route::get("/hello", function () {
     return Response::json(["code" => "test"])->setStatus(201);
 });
 
-$router->get("/test/{id}/preuba/{title}", function () {
+Route::get("/test/{id}/preuba/{title}", function () {
     return Response::text("test param");
 });
 
-$router->post("/hello", function () {
+$app->router()->post("/hello", function () {
     return Response::text("hello post");
 });
 
-$router->get("/redirect", function () {
+Route::get("/redirect", function () {
     return Response::redirect("/hello");
 });
 
-$server = new ServerNative();
-try {
-    $action = $router->resolve(new Request($server));
-    $response = $action();
-    $server->sendResponse($response);
-} catch (HttpNotFoundException $e) {
-    $server->sendResponse(Response::text("Not Found")->setStatus(404));
-}
+$app->run();

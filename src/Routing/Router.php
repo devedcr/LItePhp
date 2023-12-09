@@ -30,57 +30,61 @@ class Router
      * @param HttpMethod $method
      * @param string $uri
      * @param Closure $action
-     * @return void
+     * @return Route
      */
-    private function register_method(HttpMethod $method, string $uri, Closure $action)
+    private function register_method(HttpMethod $method, string $uri, Closure $action): Route
     {
-        $this->routes[$method->value][] = new Route($uri, $action);
+        $route = new Route($uri, $action);
+        $this->routes[$method->value][] = $route;
+        return $route;
     }
-    
+
     /**
      * Setter Route Get
      * @param string $uri
      * @param Closure $action
-     * @return void
+     * @return Route
      */
-    public function get(string $uri, Closure $action)
+    public function get(string $uri, Closure $action): Route
     {
-        $this->register_method(HttpMethod::GET, $uri, $action);
+        return $this->register_method(HttpMethod::GET, $uri, $action);
     }
 
     /**
      * Setter Route Post
      * @param string $uri
      * @param Closure $action
-     * @return void
+     * @return Route
      */
-    public function post(string $uri, Closure $action)
+    public function post(string $uri, Closure $action): Route
     {
-        $this->register_method(HttpMethod::POST, $uri, $action);
+        $route = $this->register_method(HttpMethod::POST, $uri, $action);
+        return $route;
     }
 
     /**
      * Setter Routes Put
      * @param string $uri
      * @param Closure $action
-     * @return void
+     * @return Route
      */
-    public function put(string $uri, Closure $action)
+    public function put(string $uri, Closure $action): Route
     {
-        $this->register_method(HttpMethod::PUT, $uri, $action);
+        return $this->register_method(HttpMethod::PUT, $uri, $action);
     }
-    
+
     /**
      * Setter Routes Delete
      * @param string $uri
      * @param Closure $action
-     * @return void
+     * @return Route
      */
-    public function delete(string $uri, Closure $action)
+    public function delete(string $uri, Closure $action): Route
     {
-        $this->register_method(HttpMethod::DELETE, $uri, $action);
+        return $this->register_method(HttpMethod::DELETE, $uri, $action);
     }
-    
+
+
     /**
      * Resolve Request Route
      * @param Request $request

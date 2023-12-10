@@ -20,18 +20,20 @@ class Request
      * @var array
      */
     private array $data;
-    
+
     /**
      * Query Params Get 
      * @var array
      */
     private array $query;
-    
+
     /**
      * Methods of Request
      * @var HttpMethod
      */
     private HttpMethod $method;
+
+    private array $headers;
 
 
     public function __construct(IServer $server)
@@ -40,13 +42,30 @@ class Request
         $this->data = $server->requestPost();
         $this->query = $server->requestParam();
         $this->method = $server->requestMethod();
+        $this->setHeaders($server->getHeaders());
+    }
+
+    public function headers(string $header = null): array | string |null
+    {
+        if (is_null($header)) {
+            return $this->headers;
+        }
+        return $this->headers[strtolower($header)] ?? null;
+    }
+
+    public function setHeaders(array $headers): self
+    {
+        foreach ($headers as $header => $value) {
+            $this->headers[strtolower($header)] = $value;
+        }
+        return $this;
     }
 
     /**
      * Getter URI Request
      * @return string
      */
-    public function getUri():string
+    public function getUri(): string
     {
         return $this->uri;
     }
@@ -55,7 +74,7 @@ class Request
      * Getter Methods Request
      * @return HttpMethod
      */
-    public function getMethod():HttpMethod
+    public function getMethod(): HttpMethod
     {
         return $this->method;
     }

@@ -42,6 +42,11 @@ class ServerNative implements IServer
         return $_GET;
     }
 
+    public function getHeaders(): array
+    {
+        return getallheaders();
+    }
+
     /**
      * @inheritDoc
      */

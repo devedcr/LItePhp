@@ -6,6 +6,8 @@ use Closure;
 use Lite\Http\HttpMethod;
 use Lite\Http\HttpNotFoundException;
 use Lite\Http\Request;
+use Lite\Http\Response;
+use Middleware;
 
 /**
  * Router class Management Routes
@@ -90,12 +92,41 @@ class Router
      * @param Request $request
      * @return Closure
      */
-    public function resolve(Request $request): Closure
+    public function resolveAction(Request $request): Closure
     {
         foreach ($this->routes[$request->getMethod()->value] as $route) {
             if ($route->match($request->getUri()))
                 return $route->action();
         }
         throw new HttpNotFoundException();
+    }
+
+    public function resolveRoute(Request $request): Route
+    {
+        foreach ($this->routes[$request->getMethod()->value] as $route) {
+            if ($route->match($request->getUri()))
+                return $route;
+        }
+        throw new HttpNotFoundException();
+    }
+
+    public function chain_middeware(Request $request, array $middlewares): Response
+    {
+        if (count($middlewares) == 1) {
+            return ($middlewares[0])();
+        }
+        return $middlewares[0]->handle(
+            $request,
+            fn () => $this->chain_middeware($request, array_slice($middlewares, 1))
+        );
+    }
+
+    public function resolve(Request $request): Response
+    {
+        $route = $this->resolveRoute($request);
+        if ($route->hasMiddleware()) {
+            return $this->chain_middeware($request, $route->middlewares);
+        }
+        return ($route->action)();
     }
 }

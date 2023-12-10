@@ -5,6 +5,7 @@ namespace Lite\Routing;
 use Closure;
 use Lite\App;
 use Lite\Container\Container;
+use Middleware;
 
 /**
  * Route Class Join that join uri and action
@@ -41,6 +42,8 @@ class Route
      */
     public array $parameter;
 
+    public array $middlewares;
+
     public function __construct(string $uri, Closure $action)
     {
         $this->uri = $uri;
@@ -49,6 +52,7 @@ class Route
         $this->regex_param_value = "#^" . preg_replace($this->regex_param_name, '(\S+)', $this->uri) . "/?$#";
         preg_match_all($this->regex_param_name, $this->uri, $param_name);
         $this->parameter = $param_name[1];
+        $this->middlewares = [];
     }
     /**
      *  Getter Route Action 
@@ -94,5 +98,18 @@ class Route
     {
         $app = Container::singleton(App::class);
         return $app->router()->get($uri, $action);
+    }
+
+    public function setMiddleware(array $middlewares)
+    {
+        if (count($middlewares) == 0)
+            return;
+        $this->middlewares = array_map(fn ($middleware) => Container::singleton($middleware), $middlewares);
+        $this->middlewares[] = $this->action;
+    }
+
+    public function hasMiddleware(): bool
+    {
+        return count($this->middlewares) > 0;
     }
 }

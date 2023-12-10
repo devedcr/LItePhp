@@ -3,11 +3,35 @@
 require_once "../vendor/autoload.php";
 
 use Lite\App;
-use Lite\Container\Container;
+use Lite\Http\Middleware;
+use Lite\Http\Request;
 use Lite\Http\Response;
 use Lite\Routing\Route;
 
-$app = Container::singleton(App::class);
+$app = App::bootstrap();
+
+class AuthMiddleware implements Middleware
+{
+    public function handle(Request $request, Closure $next)
+    {
+        if (!$request->headers("Authorization")) {
+            return Response::text("Token Authorizaton not found");
+        }
+        return $next();
+    }
+}
+
+class TestMiddleware implements Middleware
+{
+    public function handle(Request $request, Closure $next)
+    {
+        if (!$request->headers("test")) {
+            return Response::text("Token test not found");
+        }
+        return $next();
+    }
+}
+
 
 Route::get("/hello", function () {
     return Response::json(["code" => "test"])->setStatus(201);

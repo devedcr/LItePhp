@@ -2,6 +2,7 @@
 
 namespace Lite;
 
+use Lite\Container\Container;
 use Lite\Http\HttpNotFoundException;
 use Lite\Http\Request;
 use Lite\Http\Response;
@@ -11,13 +12,15 @@ use Lite\Server\ServerNative;
 
 class App
 {
-    private Router $router;
-    private IServer $iserver;
+    public Router $router;
+    public IServer $iserver;
 
-    public function __construct()
+    public static function bootstrap(): self
     {
-        $this->router = new Router();
-        $this->iserver = new ServerNative();
+        $app = Container::singleton(self::class);
+        $app->router = new Router();
+        $app->iserver = new ServerNative();
+        return $app;
     }
 
     public function router(): Router
@@ -28,8 +31,9 @@ class App
     public function run()
     {
         try {
-            $action = $this->router->resolve(new Request($this->iserver));
-            $response = $action();
+            //$action = $this->router->resolveAction(new Request($this->iserver));
+            //$response = $action();
+            $response = $this->router->resolve(new Request($this->iserver));
             $this->iserver->sendResponse($response);
         } catch (HttpNotFoundException $e) {
             $this->iserver->sendResponse(Response::text("Not Found")->setStatus(404));

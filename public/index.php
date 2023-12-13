@@ -3,8 +3,6 @@
 require_once "../vendor/autoload.php";
 
 use Lite\App;
-use Lite\Http\Middleware;
-use Lite\Http\Request;
 use Lite\Http\Response;
 use Lite\Routing\Route;
 
@@ -27,7 +25,7 @@ Route::get("/redirect", function () {
 });
 
 Route::get("/html", function () {
-    return Response::view("welcome");
+    return Response::view("welcome", ["name" => "eduardo", "email" => "ed@ed.com"]);
 });
 
 

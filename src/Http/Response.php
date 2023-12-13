@@ -145,11 +145,12 @@ class Response
             ->setHeader("location", $uri);
     }
 
-    public static function view(string $viewName): self
+    public static function view(string $viewName, array $params = [], string $layout = null): self
     {
         $app = Container::singleton(App::class);
+        $content = $app->view->render($viewName, $params, $layout);
         return (new self())
             ->setHeader("content-type", "text/html")
-            ->setContent($app->view->render($viewName));
+            ->setContent($content);
     }
 }

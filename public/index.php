@@ -10,29 +10,6 @@ use Lite\Routing\Route;
 
 $app = App::bootstrap();
 
-class AuthMiddleware implements Middleware
-{
-    public function handle(Request $request, Closure $next)
-    {
-        if (!$request->headers("Authorization")) {
-            return Response::text("Token Authorizaton not found");
-        }
-        return $next();
-    }
-}
-
-class TestMiddleware implements Middleware
-{
-    public function handle(Request $request, Closure $next)
-    {
-        if (!$request->headers("test")) {
-            return Response::text("Token test not found");
-        }
-        return $next();
-    }
-}
-
-
 Route::get("/hello", function () {
     return Response::json(["code" => "test"])->setStatus(201);
 });
@@ -48,5 +25,10 @@ $app->router()->post("/hello", function () {
 Route::get("/redirect", function () {
     return Response::redirect("/hello");
 });
+
+Route::get("/html", function () {
+    return Response::view("welcome");
+});
+
 
 $app->run();

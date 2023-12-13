@@ -9,17 +9,21 @@ use Lite\Http\Response;
 use Lite\Routing\Router;
 use Lite\Server\IServer;
 use Lite\Server\ServerNative;
+use Lite\View\IViewEngine;
+use Lite\View\ViewEngine;
 
 class App
 {
     public Router $router;
     public IServer $iserver;
+    public IViewEngine $view;
 
     public static function bootstrap(): self
     {
         $app = Container::singleton(self::class);
         $app->router = new Router();
         $app->iserver = new ServerNative();
+        $app->view = new ViewEngine(__DIR__."/../view");
         return $app;
     }
 
@@ -31,8 +35,6 @@ class App
     public function run()
     {
         try {
-            //$action = $this->router->resolveAction(new Request($this->iserver));
-            //$response = $action();
             $response = $this->router->resolve(new Request($this->iserver));
             $this->iserver->sendResponse($response);
         } catch (HttpNotFoundException $e) {

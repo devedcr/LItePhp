@@ -2,6 +2,9 @@
 
 namespace Lite\Http;
 
+use Lite\App;
+use Lite\Container\Container;
+
 /**
  * Response Class Server
  */
@@ -40,7 +43,7 @@ class Response
     {
         return $this->status;
     }
-    
+
     /**
      * Setter Status
      * @param integer $status
@@ -93,7 +96,7 @@ class Response
         $this->content = $content;
         return $this;
     }
-    
+
     /**
      * Static Builder Response application/json
      * @param array $data
@@ -140,5 +143,13 @@ class Response
         return (new self())
             ->setStatus(302)
             ->setHeader("location", $uri);
+    }
+
+    public static function view(string $viewName): self
+    {
+        $app = Container::singleton(App::class);
+        return (new self())
+            ->setHeader("content-type", "text/html")
+            ->setContent($app->view->render($viewName));
     }
 }

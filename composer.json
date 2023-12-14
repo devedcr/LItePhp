@@ -3,12 +3,16 @@
     "description": "Framework Simple Based Laravel",
     "license": "MIT",
     "scripts": {
-        "test":"phpunit --color=always --testdox test/"
+        "test": "phpunit --color=always --testdox test/"
     },
     "autoload": {
         "psr-4": {
             "Lite\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers/app.php",
+            "src/Helpers/http.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

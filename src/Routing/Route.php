@@ -96,8 +96,7 @@ class Route
 
     public static function get(string $uri, Closure $action)
     {
-        $app = Container::singleton(App::class);
-        return $app->router()->get($uri, $action);
+        return app()->router()->get($uri, $action);
     }
 
     public function setMiddleware(array $middlewares)

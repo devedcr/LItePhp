@@ -113,7 +113,7 @@ class Router
     public function chain_middeware(Request $request, array $middlewares): Response
     {
         if (count($middlewares) == 1) {
-            return ($middlewares[0])();
+            return ($middlewares[0])($request);
         }
         return $middlewares[0]->handle(
             $request,
@@ -127,6 +127,6 @@ class Router
         if ($route->hasMiddleware()) {
             return $this->chain_middeware($request, $route->middlewares);
         }
-        return ($route->action)();
+        return ($route->action)($request);
     }
 }

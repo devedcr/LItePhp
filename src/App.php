@@ -9,6 +9,7 @@ use Lite\Http\Response;
 use Lite\Routing\Router;
 use Lite\Server\IServer;
 use Lite\Server\ServerNative;
+use Lite\Validation\Exception\ValidationErrors;
 use Lite\View\IViewEngine;
 use Lite\View\ViewEngine;
 
@@ -23,7 +24,7 @@ class App
         $app = Container::singleton(self::class);
         $app->router = new Router();
         $app->iserver = new ServerNative();
-        $app->view = new ViewEngine(__DIR__."/../view");
+        $app->view = new ViewEngine(__DIR__ . "/../view");
         return $app;
     }
 
@@ -38,7 +39,14 @@ class App
             $response = $this->router->resolve(new Request($this->iserver));
             $this->iserver->sendResponse($response);
         } catch (HttpNotFoundException $e) {
-            $this->iserver->sendResponse(Response::text("Not Found")->setStatus(404));
+            $this->abort(text("Not Found")->setStatus(404));
+        } catch (ValidationErrors $e) {
+            $this->abort(json(["errors" => $e->getErrors()])->setStatus(422));
         }
+    }
+
+    public function abort(Response $response)
+    {
+        $this->iserver->sendResponse($response);
     }
 }

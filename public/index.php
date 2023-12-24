@@ -3,9 +3,12 @@
 require_once "../vendor/autoload.php";
 
 use Lite\App;
+use Lite\Http\Request;
 use Lite\Routing\Route;
+use Lite\Validation\Rules;
 
 $app = App::bootstrap();
+
 
 Route::get("/hello", function () {
     return json(["code" => "test"])->setStatus(201);
@@ -25,6 +28,14 @@ Route::get("/redirect", function () {
 
 Route::get("/html", function () {
     return view("welcome", ["name" => "eduardo", "email" => "ed@ed.com"]);
+});
+
+Route::post("/save", function (Request $request) {
+    return json($request->validate([
+        "name" => "required",
+        "email" => ["required", "email"],
+        "test" => "required"
+    ]));
 });
 
 $app->run();

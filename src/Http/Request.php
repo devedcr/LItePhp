@@ -3,6 +3,7 @@
 namespace Lite\Http;
 
 use Lite\Server\IServer;
+use Lite\Validation\Validator;
 
 /**
  * Request Class Server
@@ -77,5 +78,11 @@ class Request
     public function getMethod(): HttpMethod
     {
         return $this->method;
+    }
+
+    public function validate(array $validations, $messages = []): array
+    {
+        $validator = new Validator($this->data);
+        return $validator->validate($validations, $messages);
     }
 }

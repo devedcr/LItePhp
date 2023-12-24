@@ -99,6 +99,12 @@ class Route
         return app()->router()->get($uri, $action);
     }
 
+    public static function post(string $uri, Closure $action)
+    {
+        return app()->router()->post($uri, $action);
+    }
+
+
     public function setMiddleware(array $middlewares)
     {
         if (count($middlewares) == 0)

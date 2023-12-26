@@ -11,7 +11,8 @@
         },
         "files": [
             "src/Helpers/app.php",
-            "src/Helpers/http.php"
+            "src/Helpers/http.php",
+            "src/Helpers/session.php"
         ]
     },
     "autoload-dev": {

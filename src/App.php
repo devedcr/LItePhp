@@ -9,6 +9,8 @@ use Lite\Http\Response;
 use Lite\Routing\Router;
 use Lite\Server\IServer;
 use Lite\Server\ServerNative;
+use Lite\Session\Session;
+use Lite\Session\SessionNative;
 use Lite\Validation\Exception\ValidationErrors;
 use Lite\View\IViewEngine;
 use Lite\View\ViewEngine;
@@ -18,6 +20,7 @@ class App
     public Router $router;
     public IServer $iserver;
     public IViewEngine $view;
+    public Session $session;
 
     public static function bootstrap(): self
     {
@@ -25,8 +28,10 @@ class App
         $app->router = new Router();
         $app->iserver = new ServerNative();
         $app->view = new ViewEngine(__DIR__ . "/../view");
+        $app->session = new Session(new SessionNative());
         return $app;
     }
+
 
     public function router(): Router
     {

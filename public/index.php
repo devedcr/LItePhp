@@ -5,7 +5,6 @@ require_once "../vendor/autoload.php";
 use Lite\App;
 use Lite\Http\Request;
 use Lite\Routing\Route;
-use Lite\Validation\Rules;
 
 $app = App::bootstrap();
 
@@ -36,6 +35,14 @@ Route::post("/save", function (Request $request) {
         "email" => ["required", "email"],
         "test" => "required"
     ]));
+});
+
+Route::get("/session", function (Request $request) {
+    session()->flash("alert", "test alert");
+    return json([
+        "id" => session()->id(),
+        "test" => $_SESSION
+    ]);
 });
 
 $app->run();

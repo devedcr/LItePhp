@@ -4,6 +4,7 @@ require_once "../vendor/autoload.php";
 
 use Lite\App;
 use Lite\Database\DB;
+use Lite\Database\Model;
 use Lite\Http\Request;
 use Lite\Routing\Route;
 
@@ -60,12 +61,23 @@ Route::post("/form", function (Request $request) {
     ]);
 });
 
+class User extends Model
+{
+}
+
 Route::post("/user/create", function (Request $request) {
     $request->validate([
         "name" => ["required"],
         "email" => ["required", "email"]
     ]);
-    DB::statement("insert into users(name,email) values (:name,:email);", $request->data());
+    
+    //DB::statement("insert into users(name,email) values (:name,:email);", $request->data());
+
+    $user = new User();
+    $user->name = $request->data("name");
+    $user->email = $request->data("email");
+    $user->save();
+
     return json([
         "ok" => true
     ]);
@@ -77,5 +89,7 @@ Route::get("/user/list", function (Request $request) {
         "data" => DB::statement("select*from users")
     ]);
 });
+
+
 
 $app->run();

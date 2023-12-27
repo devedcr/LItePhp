@@ -5,6 +5,7 @@ namespace Lite;
 use Lite\Container\Container;
 use Lite\Database\Driver\IDatabaseDriver;
 use Lite\Database\Driver\PdoDriver;
+use Lite\Database\Model;
 use Lite\Http\HttpMethod;
 use Lite\Http\HttpNotFoundException;
 use Lite\Http\Request;
@@ -35,6 +36,7 @@ class App
         $app->session = new Session(new SessionNative());
         $app->database = new PdoDriver();
         $app->database->connect("pgsql", "db_test", "127.0.0.1", 5432, "postgres", "edcr");
+        Model::setDatabaseDriver($app->database);
         return $app;
     }
 

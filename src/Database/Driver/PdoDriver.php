@@ -8,7 +8,6 @@ class PdoDriver implements IDatabaseDriver
 {
     protected PDO $db;
 
-
     public function connect(string $protocol, string $dbname, string $host, int $port, string $user, string $pass)
     {
         $dsn = "$protocol:host=$host;port=$port;dbname=$dbname;";

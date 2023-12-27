@@ -50,12 +50,12 @@ class Request
         $this->setHeaders($server->getHeaders());
     }
 
-    public function data()
+    public function data(string $key = null)
     {
-        if ($this->application_json()) {
-            return $this->dataJson;
-        }
-        return $this->data;
+        $data = $this->application_json() ? $this->dataJson : $this->data;
+        if (is_null($key))
+            return $data;
+        return $data[$key];
     }
 
     public function headers(string $header = null): array | string |null

@@ -22,7 +22,7 @@ class Session implements ISession
         $this->set(self::$FLASH, $flashes);
     }
 
-    public function flash(string $key, string $value): void
+    public function flash(string $key, mixed $value): void
     {
         $flashes = $this->get(self::$FLASH, null);
 

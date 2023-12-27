@@ -3,6 +3,7 @@
 namespace Lite;
 
 use Lite\Container\Container;
+use Lite\Http\HttpMethod;
 use Lite\Http\HttpNotFoundException;
 use Lite\Http\Request;
 use Lite\Http\Response;
@@ -38,16 +39,41 @@ class App
         return $this->router;
     }
 
+    public function prepareNextRequest()
+    {
+        if ($this->iserver->requestMethod() == HttpMethod::GET)
+            $this->session->set("_previous", $this->iserver->requestUri());
+    }
+
     public function run()
     {
         try {
+            $this->prepareNextRequest();
             $response = $this->router->resolve(new Request($this->iserver));
-            $this->iserver->sendResponse($response);
+            $this->terminate($response);
         } catch (HttpNotFoundException $e) {
             $this->abort(text("Not Found")->setStatus(404));
         } catch (ValidationErrors $e) {
+            if ($this->request_of_form()) {
+                session()->flash("_errors", $e->getErrors());
+                session()->flash("_old", $this->iserver->requestPost());
+                return $this->abort(redirect("/form"));
+            }
             $this->abort(json(["errors" => $e->getErrors()])->setStatus(422));
         }
+    }
+
+    public function request_of_form(): bool
+    {
+        $headers = $this->iserver->getHeaders();
+        if (!isset($headers["Content-Type"]))
+            return false;
+        return  strtolower($headers["Content-Type"]) == "application/x-www-form-urlencoded";
+    }
+
+    public function terminate(Response $response)
+    {
+        $this->iserver->sendResponse($response);
     }
 
     public function abort(Response $response)

@@ -45,4 +45,19 @@ Route::get("/session", function (Request $request) {
     ]);
 });
 
+Route::get("/form", function (Request $request) {
+    return view("form");
+});
+
+Route::post("/form", function (Request $request) {
+    $request->validate([
+        "email" => ["required", "email"],
+        "name" => ["required"]
+    ]);
+    return json([
+        "status" => "ok"
+    ]);
+});
+
+
 $app->run();

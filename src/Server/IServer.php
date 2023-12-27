@@ -42,4 +42,5 @@ interface IServer
     public function sendResponse(Response $response): void;
 
     public function getHeaders(): array;
+
 }

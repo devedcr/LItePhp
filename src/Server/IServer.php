@@ -28,6 +28,8 @@ interface IServer
      */
     public function requestPost(): array;
 
+    public function requestJson(): array;
+
     /**
      * The Server return Get Query Params
      * @return array

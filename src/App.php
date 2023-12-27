@@ -3,6 +3,8 @@
 namespace Lite;
 
 use Lite\Container\Container;
+use Lite\Database\Driver\IDatabaseDriver;
+use Lite\Database\Driver\PdoDriver;
 use Lite\Http\HttpMethod;
 use Lite\Http\HttpNotFoundException;
 use Lite\Http\Request;
@@ -22,6 +24,7 @@ class App
     public IServer $iserver;
     public IViewEngine $view;
     public Session $session;
+    public IDatabaseDriver $database;
 
     public static function bootstrap(): self
     {
@@ -30,9 +33,10 @@ class App
         $app->iserver = new ServerNative();
         $app->view = new ViewEngine(__DIR__ . "/../view");
         $app->session = new Session(new SessionNative());
+        $app->database = new PdoDriver();
+        $app->database->connect("pgsql", "db_test", "127.0.0.1", 5432, "postgres", "edcr");
         return $app;
     }
-
 
     public function router(): Router
     {

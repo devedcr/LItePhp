@@ -34,6 +34,11 @@ class ServerNative implements IServer
         return  $_POST;
     }
 
+    public function requestJson(): array
+    {
+        return json_decode(trim(file_get_contents("php://input")), true) ?? [];
+    }
+
     /**
      * @inheritDoc
      */

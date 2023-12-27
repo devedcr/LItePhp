@@ -6,3 +6,17 @@ name=ed&email=ed@ed.com&test=dfjdh
 ###
 POST http://127.0.0.1:8080/form
 Content-Type: application/x-www-form-urlencoded
+
+name=sdsd
+###
+POST http://127.0.0.1:8080/user/create
+Content-Type: application/json
+
+{
+    "name":"jose",
+    "email":"jose@jose.com"
+}
+
+
+###
+GET http://127.0.0.1:8080/user/list

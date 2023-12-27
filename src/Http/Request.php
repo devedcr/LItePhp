@@ -22,6 +22,8 @@ class Request
      */
     private array $data;
 
+    private array $dataJson;
+
     /**
      * Query Params Get 
      * @var array
@@ -37,13 +39,23 @@ class Request
     private array $headers;
 
 
+
     public function __construct(IServer $server)
     {
         $this->uri = $server->requestUri();
         $this->data = $server->requestPost();
+        $this->dataJson = $server->requestJson();
         $this->query = $server->requestParam();
         $this->method = $server->requestMethod();
         $this->setHeaders($server->getHeaders());
+    }
+
+    public function data()
+    {
+        if ($this->application_json()) {
+            return $this->dataJson;
+        }
+        return $this->data;
     }
 
     public function headers(string $header = null): array | string |null
@@ -82,7 +94,12 @@ class Request
 
     public function validate(array $validations, $messages = []): array
     {
-        $validator = new Validator($this->data);
+        $validator = new Validator($this->data());
         return $validator->validate($validations, $messages);
+    }
+
+    public function application_json(): bool
+    {
+        return $this->headers("Content-Type") == "application/json";
     }
 }

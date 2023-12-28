@@ -63,6 +63,7 @@ Route::post("/form", function (Request $request) {
 
 class User extends Model
 {
+    protected array $fillable = ["name", "email"];
 }
 
 Route::post("/user/create", function (Request $request) {
@@ -70,7 +71,7 @@ Route::post("/user/create", function (Request $request) {
         "name" => ["required"],
         "email" => ["required", "email"]
     ]);
-    
+
     //DB::statement("insert into users(name,email) values (:name,:email);", $request->data());
 
     $user = new User();
@@ -87,6 +88,16 @@ Route::get("/user/list", function (Request $request) {
     return json([
         "ok" => true,
         "data" => DB::statement("select*from users")
+    ]);
+});
+
+Route::post("/user/test", function (Request $request) {
+    return json([
+        "ok" => true,
+        "data" => User::create([
+            "name" => $request->data("name"),
+            "email" => $request->data("email"),
+        ])->toArray()
     ]);
 });
 

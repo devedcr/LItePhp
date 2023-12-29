@@ -34,7 +34,7 @@ class App
         $app->iserver = new ServerNative();
         $app->view = new ViewEngine(__DIR__ . "/../view");
         $app->session = new Session(new SessionNative());
-        $app->database = new PdoDriver();
+        $app->database = Container::singleton(IDatabaseDriver::class, PdoDriver::class);
         $app->database->connect("pgsql", "db_test", "127.0.0.1", 5432, "postgres", "edcr");
         Model::setDatabaseDriver($app->database);
         return $app;

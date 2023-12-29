@@ -3,7 +3,7 @@
 use Lite\Database\DB;
 use Lite\Database\Migration\IMigration;
 
-new class implements IMigration
+return new class implements IMigration
 {
     public function up()
     {

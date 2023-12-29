@@ -3,13 +3,14 @@
 use Lite\Database\DB;
 use Lite\Database\Migration\IMigration;
 
-new class implements IMigration
+return new class implements IMigration
 {
     public function up()
     {
         DB::statement("
-            CREATE TABLE USERS(
-                ID INT PRIMARY KEY
+            CREATE TABLE PRODUCTS(
+                ID INT PRIMARY KEY,
+                NAME VARCHAR(255)           
             );
         ");
     }

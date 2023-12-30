@@ -2,6 +2,8 @@
 
 namespace Lite;
 
+use Dotenv\Dotenv;
+use Lite\Config\Config;
 use Lite\Container\Container;
 use Lite\Database\Driver\IDatabaseDriver;
 use Lite\Database\Driver\PdoDriver;
@@ -21,14 +23,18 @@ use Lite\View\ViewEngine;
 
 class App
 {
+    public static string $root;
     public Router $router;
     public IServer $iserver;
     public IViewEngine $view;
     public Session $session;
     public IDatabaseDriver $database;
 
-    public static function bootstrap(): self
+    public static function bootstrap(string $root): self
     {
+        self::$root = $root;
+        Dotenv::createImmutable($root)->load();
+        Config::load("$root/config");
         $app = Container::singleton(self::class);
         $app->router = new Router();
         $app->iserver = new ServerNative();

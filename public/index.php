@@ -8,11 +8,15 @@ use Lite\Database\Model;
 use Lite\Http\Request;
 use Lite\Routing\Route;
 
-$app = App::bootstrap();
+$app = App::bootstrap(__DIR__ . "/../");
 
 
 Route::get("/hello", function () {
-    return json(["code" => "test"])->setStatus(201);
+    return json([
+        "code" => "test",
+        "host" => env("APP_URL"),
+        "port" => env("DB_PORT")
+    ])->setStatus(201);
 });
 
 Route::get("/test/{id}/preuba/{title}", function () {

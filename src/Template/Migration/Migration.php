@@ -15,5 +15,6 @@ return new class implements IMigration
     }
     public function down()
     {
+        DB::statement("DROP TABLE @table;");
     }
 };

@@ -18,11 +18,16 @@ class Migrator
     }
 
 
+    private function get_table_migration(): array
+    {
+        $this->driver->statement("CREATE TABLE IF NOT EXISTS migrations( name varchar(255) );");
+        return $this->driver->statement("SELECT * FROM migrations");
+    }
+
     public function migrate()
     {
         $files = glob("{$this->directionCreate}/*.php");
-        $this->driver->statement("CREATE TABLE IF NOT EXISTS migrations( name varchar(255) );");
-        $tables  = $this->driver->statement("SELECT * FROM migrations");
+        $tables  = $this->get_table_migration();
         $names_files = [];
         foreach ($tables as $table)
             $names_files[$table["name"]] = "";
@@ -36,9 +41,34 @@ class Migrator
                 $this->log("migrated {$filename}");
             }
         }
-        $this->log("Migration Fnished");
+        $this->log("Migration Finished");
     }
 
+
+    public function rollback(int $steps = null)
+    {
+        $files = array_reverse(glob("{$this->directionCreate}/*.php"));
+        $count_migrations = count($this->get_table_migration());
+        if ($count_migrations == 0) {
+            $this->log("Rollback Finished");
+            return;
+        };
+
+        if (is_null($steps) || $steps > $count_migrations)
+            $steps = $count_migrations;
+
+        foreach (array_slice($files, -$count_migrations) as $path_file) {
+            $filename = basename($path_file);
+            $this->driver->statement('DELETE FROM migrations WHERE name = ?', [$filename]);
+            $file = require $path_file;
+            $file->down();
+            $this->log("Rollback $filename");
+            if (--$steps == 0) {
+                break;
+            }
+        }
+        $this->log("Rollback Finished");
+    }
     public function log(string $message)
     {
         print $message . PHP_EOL;

@@ -20,3 +20,8 @@ if ($argv[1] == "make:migration") {
 if ($argv[1] == "migrate") {
     $migrator->migrate();
 }
+
+if ($argv[1] == "rollback") {
+    $steps = (isset($argv[2]) || isset($argv[3])) ? $argv[3] : null;
+    $migrator->rollback($steps);
+}

@@ -10,7 +10,6 @@ use Lite\Routing\Route;
 
 $app = App::bootstrap(__DIR__ . "/../");
 
-
 Route::get("/hello", function () {
     return json([
         "code" => "test",

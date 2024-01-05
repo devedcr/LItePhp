@@ -1,5 +1,5 @@
 <?php
 return [
-    "engine" => "lune",
+    "engine" => "lite",
     "path" => resourcesDirectory()."/view"
 ];

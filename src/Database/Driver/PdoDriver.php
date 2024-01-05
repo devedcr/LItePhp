@@ -11,7 +11,7 @@ class PdoDriver implements IDatabaseDriver
     public function connect(string $protocol, string $dbname, string $host, int $port, string $user, string $pass)
     {
         $dsn = "$protocol:host=$host;port=$port;dbname=$dbname;";
-        $this->db = new PDO($dsn, $user, $pass);
+        $this->db = new PDO($dsn, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     }
 
     public function statement(string $query, array $bind = []): mixed

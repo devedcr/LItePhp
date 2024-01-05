@@ -4,6 +4,8 @@ namespace Lite\Http;
 
 use Lite\App;
 use Lite\Container\Container;
+use Lite\View\IViewEngine;
+use Lite\View\ViewEngine;
 
 /**
  * Response Class Server
@@ -147,7 +149,7 @@ class Response
 
     public static function view(string $viewName, array $params = [], string $layout = null): self
     {
-        $content = app()->view->render($viewName, $params, $layout);
+        $content = app(IViewEngine::class)->render($viewName, $params, $layout);
         return (new self())
             ->setHeader("content-type", "text/html")
             ->setContent($content);

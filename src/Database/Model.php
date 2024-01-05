@@ -63,7 +63,6 @@ abstract class Model
         $data_persist = [];
         foreach (array_values($model->fillable) as $key) {
             if (!isset($data[$key])) {
-                var_dump(array_values($model->fillable));
                 throw new Error("Model {$model->table} need field {$key} of field fillable");
             }
             $data_persist[$key] = $data[$key];

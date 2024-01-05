@@ -6,7 +6,6 @@ use Dotenv\Dotenv;
 use Lite\Config\Config;
 use Lite\Container\Container;
 use Lite\Database\Driver\IDatabaseDriver;
-use Lite\Database\Driver\PdoDriver;
 use Lite\Database\Model;
 use Lite\Http\HttpMethod;
 use Lite\Http\HttpNotFoundException;
@@ -14,36 +13,66 @@ use Lite\Http\Request;
 use Lite\Http\Response;
 use Lite\Routing\Router;
 use Lite\Server\IServer;
-use Lite\Server\ServerNative;
 use Lite\Session\Session;
-use Lite\Session\SessionNative;
 use Lite\Validation\Exception\ValidationErrors;
-use Lite\View\IViewEngine;
-use Lite\View\ViewEngine;
 
 class App
 {
     public static string $root;
     public Router $router;
     public IServer $iserver;
-    public IViewEngine $view;
     public Session $session;
     public IDatabaseDriver $database;
 
     public static function bootstrap(string $root): self
     {
         self::$root = $root;
-        Dotenv::createImmutable($root)->load();
-        Config::load("$root/config");
         $app = Container::singleton(self::class);
-        $app->router = new Router();
-        $app->iserver = new ServerNative();
-        $app->view = new ViewEngine(__DIR__ . "/../view");
-        $app->session = new Session(new SessionNative());
-        $app->database = Container::singleton(IDatabaseDriver::class, PdoDriver::class);
-        $app->database->connect("pgsql", "db_test", "127.0.0.1", 5432, "postgres", "edcr");
-        Model::setDatabaseDriver($app->database);
-        return $app;
+
+        return $app->loadfilesConfig()
+            ->loadServiceProvider("boot")
+            ->loadHttpHandler()
+            ->upDatabase()
+            ->loadServiceProvider("runtime");
+    }
+
+    public function loadfilesConfig(): self
+    {
+        Dotenv::createImmutable(self::$root)->load();
+        Config::load(self::$root . "/config");
+        return $this;
+    }
+
+    public function loadServiceProvider(string $name): self
+    {
+        foreach (config("provider.$name", []) as $provider) {
+            $instance = new $provider();
+            $instance->register_service();
+        }
+        return $this;
+    }
+
+    public function loadHttpHandler(): self
+    {
+        $this->router = app(Router::class);
+        $this->iserver = app(IServer::class);
+        $this->session = app(Session::class);
+        return $this;
+    }
+
+    public function upDatabase(): self
+    {
+        $this->database = app(IDatabaseDriver::class);
+        $this->database->connect(
+            config("database.connection"),
+            config("database.database"),
+            config("database.host"),
+            config("database.port"),
+            config("database.username"),
+            config("database.password")
+        );
+        Model::setDatabaseDriver($this->database);
+        return $this;
     }
 
     public function router(): Router

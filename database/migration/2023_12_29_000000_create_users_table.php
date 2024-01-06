@@ -9,8 +9,12 @@ return new class implements IMigration
     {
         DB::statement("
             CREATE TABLE USERS(
-                ID INT PRIMARY KEY
-            );
+                ID SERIAL PRIMARY KEY,
+                NAME VARCHAR(256),
+                EMAIL VARCHAR(256),
+                created_at timestamp NULL,
+                updated_at timestamp NULL
+            ); 
         ");
     }
     public function down()

@@ -7,5 +7,7 @@ return [
         Lite\Provider\ViewServiceProvider::class,
         Lite\Provider\DatabaseServiceProvider::class,
     ],
-    "runtime" => []
+    "runtime" => [
+        App\Providers\RouteServiceProvider::class
+    ]
 ];

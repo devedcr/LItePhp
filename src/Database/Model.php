@@ -23,7 +23,8 @@ abstract class Model
     public function __construct()
     {
         if (is_null($this->table)) {
-            $this->table =  snake_case(static::class) . "s";
+            $parts = explode("\\", static::class);
+            $this->table =  snake_case($parts[count($parts) - 1]) . "s";
         }
     }
 
@@ -35,6 +36,16 @@ abstract class Model
     public function __get($name)
     {
         return $this->attributes[$name];
+    }
+
+    public function __sleep()
+    {
+        foreach ($this->attributes as $key => $value) {
+            if (in_array($key, $this->hidden)) {
+                unset($this->attributes[$key]);
+            }
+        }
+        return  array_keys(get_object_vars($this));
     }
 
     public function save(): mixed
@@ -80,6 +91,21 @@ abstract class Model
         if (count($rows) == 0)
             return null;
         return $rows[0];
+    }
+
+    public static function parseModel(array $attributes): static
+    {
+        $static = new static();
+        $static->setAttributes($attributes);
+        return $static;
+    }
+
+    public static function parseModels(array $dataModels)
+    {
+        $array_model = [];
+        foreach ($dataModels as $dataModel)
+            $array_model[] = self::parseModel($dataModel);
+        return $array_model;
     }
 
     public static function all()

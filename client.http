@@ -36,3 +36,12 @@ GET http://127.0.0.1:8080/form
 
 ###
 GET http://127.0.0.1:8080/json
+
+###
+GET http://127.0.0.1:8080/auth/login
+Content-Type: application/json
+
+{
+    "email":"jose@jose.com",
+    "password":"123"
+}

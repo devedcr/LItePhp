@@ -10,8 +10,9 @@ return new class implements IMigration
         DB::statement("
             CREATE TABLE USERS(
                 ID SERIAL PRIMARY KEY,
-                NAME VARCHAR(256),
-                EMAIL VARCHAR(256),
+                name VARCHAR(256),
+                email VARCHAR(256),
+                password VARCHAR(256),
                 created_at timestamp NULL,
                 updated_at timestamp NULL
             ); 

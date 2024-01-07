@@ -12,6 +12,11 @@ function redirect(string $uri): Response
     return Response::redirect($uri);
 }
 
+function back(): Response
+{
+    return redirect(session()->get("_previous") ?? "/");
+}
+
 function text(string $text)
 {
     return Response::text($text);
